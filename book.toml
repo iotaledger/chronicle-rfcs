@@ -1,0 +1,5 @@
+[book]
+title = "The Chronicle RFC Book"
+
+[output.html]
+no-section-label = true
