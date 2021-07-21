@@ -1,12 +1,6 @@
----
-title: scalable selective permanode for Chrysalis PH2
-tags: RFC
----
-
-# scalable-selective-permanode
-+ Feature name: `scalable-selective-permanode` for Chrysalis PH2
++ Feature name: `selective-permanode`
 + Start date: 2021-07-19
-+ RFC PR: [iotaledger/chronicle-rfcs#xx](https://github.com/iotaledger/chronicle.rs-rfcs/pull/xx)
++ RFC PR: [iotaledger/chronicle-rfcs#0001](https://github.com/iotaledger/chronicle-rfcs/pull/1)
 + Chronicle issue:  [iotaledger/chronicle.rs#102](https://github.com/iotaledger/chronicle.rs/issues/102)
 + Author list
     + Louay Kamel (louay.kamel@iota.org)
