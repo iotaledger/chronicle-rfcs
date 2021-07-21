@@ -37,6 +37,7 @@ Use cases:
         - **milestone filter**
         - **message_id filter**
         - **indexation_key filter**
+    - The filtering can be applied by API calls to prune the database.
 
 - Selective tables to create
     - Note that the user cannot select which column (field) in the table to be stored
