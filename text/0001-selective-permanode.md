@@ -2,6 +2,10 @@
 + Start date: 2021-07-19
 + RFC PR: [iotaledger/chronicle-rfcs#0001](https://github.com/iotaledger/chronicle-rfcs/pull/1)
 + Chronicle Issue:  [iotaledger/chronicle.rs#102](https://github.com/iotaledger/chronicle.rs/issues/102)
++ Author list
+    + Louay Kamel (louay.kamel@iota.org)
+    + Alexander Coats (alexander.coats@iota.org)
+    + Bing-Yang Lin (bingyang.lin@iota.org)
 
 # Summary
 
