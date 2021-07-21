@@ -1,5 +1,6 @@
 # Chronicle RFCs
 
+[![Chronicle RFC Book](https://github.com/iotaledger/chronicle-rfcs/workflows/Chronicle%20RFC%20Book/badge.svg)](https://iotaledger.github.io/chronicle-rfcs/)
 
 > This process is modelled after the approach taken by the Rust programming language, see [Rust RFC repository] for more
 information. Also see [maidsafe's RFC process] for another project into the crypto space. Our approach is taken and
