@@ -36,6 +36,7 @@ Use cases:
         - **address filter**
         - **milestone filter**
         - **message_id filter**
+        - **indexation_key filter**
 
 - Selective tables to create
     - Note that the user cannot select which column (field) in the table to be stored
