@@ -206,16 +206,16 @@ The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf 
 
 #### Pros
 
-- Suitable for both tangles with and without a coordinator
+- Suitable for both tangles with and without a coordinator.
 
 #### Cons
 
-- The user will need IOTA tokens to run a selective-permanode
-- The selective-permanode needs to issue massive redundancy value transactions for the selective messages if there are many
+- The user will need IOTA tokens to run a selective-permanode.
+- The selective-permanode needs to issue massive redundancy value transactions for the selective messages if there are many.
 - The selective-permanode needs to monitor whether the value transactions are already confirmed in the tangle, which means reattach/retry/promote are necessary if they are orphaned.
     - Will be more suitable to design it as a plugin in a IOTA node, so the incoming selected messages can be packed right away and be issued as a payload in a value transaction to itself (the IOTA node) with higher priority
 - The value transactions (with selective message(s) as a payload) between the selective-permanodes with the same filtering settings cannot be shared, because each selective-permanode will issue their own value transaction (which is unique) for the same selective message. Thus, this selective-permanode design is not scalable (each selective-permanode will remain different sets of transaction messages as the proof of selected messages even if they aim to select the same set of messages).
-- The issued value transactions (those with the selective messages as a payload) are necessary to be stored in the selective-permanode too, which introduces the following problem: Another mechanism is needed to solidify those value transactions, or we cannot know if any of them is missing. We cannot include them in a payload of another transaction and issue it again, because this will introduce an infinite loop
+- The issued value transactions (those with the selective messages as a payload) are necessary to be stored in the selective-permanode, which introduces the following problem: Another mechanism is needed to solidify those value transactions, or we cannot know if any of them is missing. We cannot include them in a payload of another transaction and issue it again, because this will introduce an infinite loop.
 - If the selected messages are packed as a single payload, then the future pruning of these messages is impossible (because the messages were already packed and issued). The user will need to issue new packed selected messages again from the oldest date.
 - If the selected messages are not packed, and each selected message is sent as a payload in a transaction one by one, then the number of transaction (which is only used to prove the sleeted message) grows linearly with the number of selected messages.
 
@@ -227,33 +227,33 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
 
 ### Pros
 
-- Suitable for both tangles with and without a coordinator
+- Suitable for both tangles with and without a coordinator.
 
 ### Cons
 
-- An additional ISCP chain is essential to running associated with the selective-permanode
-- The ISCP design is not completed yet
+- An additional ISCP chain is essential to running associated with the selective-permanode.
+- The ISCP design is not completed yet.
 
 # Unsolved questions
-- The naming of **light/hash/full proof** is proper and easy to understand?
+1. The naming of **light/hash/full proof** is proper and easy to understand? (solved)
   - We provide more description and explanation associated with their namings.
-- For **full proof** level, which option do we need to implement?
+2. For **full proof** level, which option do we need to implement?
     - Option 1
         - Pros
-            - Save the storage cost
+            - Save the storage cost.
         - Cons
-            - Need to traverse the selective-permanode to proof the selected messages
+            - Need to traverse the selective-permanode to proof the selected messages.
     - Option 2
         - Pros
-            - Ease of tracing and verifying the selected messages
+            - Ease of tracing and verifying the selected messages.
         - Cons
             - May consume lots of storage space if the number of middle messages (which might be repetitive) are many
-- Do we force the user store the full path in the proof column, or we just store the full information of selected messages and the middle message in the [messages table](#messages) and [parents table](#parents)?
+3. Do we force the user store the full path in the proof column, or we just store the full information of selected messages and the middle message in the [messages table](#messages) and [parents table](#parents)?
     - Pros
-        - Save the storage cost
+        - Save the storage cost.
     - Cons
-        - To trace a selected message will be time consuming
-- Do we choose the alternative design to implement the selective-permanode?
+        - To trace a selected message will be time consuming.
+4. Do we choose the alternative design to implement the selective-permanode?
 
 # TODO
 
