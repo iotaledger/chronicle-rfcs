@@ -85,8 +85,9 @@ Use cases:
 
 ## Pons
 
-- The selective-permanodes which have the same selected messages will record the exactly the same **proof** column, without extra data needed to be recorded (see the alternative design section for the comparison), and the stored **proof** between them can be shared.
+- The selective-permanodes which have the same selected messages will record the exactly the same **proof** column, without extra data needed to be recorded (see the [alternative design section](#alternative-design) for comparison), and the stored **proof** between them can be shared.
 - This design can be integrated after the solidification process seamlessly.
+- The future pruning of the selected messages can be done easily by database operations (see the [alternative design section](#alternative-design) for comparison).
 
 ## Cons
 
