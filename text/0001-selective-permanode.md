@@ -62,7 +62,7 @@ Use cases:
 - Traceable selective message paths
     - This feature is to ease of tracing the selected message from a globally trusted message which is used to solidify the tangle
     - The messages which are in the linked solidification paths between selected messages should be kept
-        - Those messages should be stored in the selective-permanode in three different `Proof of Insertion` levels
+        - Those messages should be stored in the selective-permanode in three different **proof** levels
             - **light proof**: Navigator points to the selected message
                 - We only store the path from the milestone index and the linked parent position of the middle messages in the path
                 - We can trace the selected message from its closest referencing milestone by the navigators to prove the existence of the selected message
