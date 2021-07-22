@@ -90,7 +90,7 @@ Use cases:
 
 ## Cons
 
-- The **proof** design should be associated with the solidification design, where we needs to define the global-trusted messages between a period of time.
+- The **proof** design should be associated with the solidification design, where we need to define the global-trusted messages between a period of time.
 
 # Example
 In the following example, messages A, C, G will be stored with full information
