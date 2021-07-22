@@ -30,7 +30,7 @@ In summary, a **selective-permanode** provides a more cost-effective way than a 
 Use cases:
 
 1. Only persist specific data of the tangle in Chronicle and truncate/remove the unwanted ones.
-2. Provide a more cost-effective storage solution than a `full-permanode`.
+2. Provide a more cost-effective storage solution than a **full-permanode**.
 
 # Current storage overhead of full-permanode
 - Around 2.6TB/year
