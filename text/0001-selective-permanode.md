@@ -193,13 +193,13 @@ In the following we introduce two kinds of selective permanode designs.
 
 ## Pre-limitations
 
-In these two alternative designs, the solidification process is still essential to make the selective permanode make sure all the selective messages are collected in a sub tangle. Also IOTA tokens are needed to execute the selective permanode.
+In these two alternative designs, the solidification process is still essential to make the selective permanode ensure all the selective messages are collected in a sub tangle. Also IOTA tokens are needed to execute the selective permanode.
 
 ## Value-transaction-based design
 
 ### Description
 
-The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf Müller uses the UTXOs to proof the existence of a message. For this selective permanode design, each selected message, or a batch of selected messages (with predefined or adaptive number of messages), is necessary to be put in the payload of a value transaction. Then, the value transaction should be issued to a trusted IOTA node, and the selective permanode needs to check afterwards to make sure the value transaction is contained by the tangle.
+The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf Müller uses the UTXOs to prove the existence of a message. For this selective permanode design, each selected message, or a batch of selected messages (with predefined or adaptive number of messages), are necessary to be put in the payload of a value transaction. Then, the value transaction should be issued to a trusted IOTA node, and the selective permanode needs to check whether the value transaction is already contained in the tangle.
 
 #### Pros
 
