@@ -246,3 +246,8 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
     - Cons
         - To trace a selected message will be time consuming
 - Do we choose the alternative design to implement the selective permanode?
+
+# TODO
+
+- Review people list and the expected deadline
+- Doodle opinion voting for the design to implement
