@@ -56,8 +56,7 @@ Use cases:
     - Some API calls will return `None` if the corresponding table is not created
 
 - Traceable selective message paths
-    - This feature is ease of tracing the selected message from a globally trusted message which is used to solidify the tangle
-      - 
+    - This feature is to ease of tracing the selected message from a globally trusted message which is used to solidify the tangle
     - The messages which are in the linked solidification paths between selected messages should be kept
         - Those messages should be stored in the selective permanode in three different `Proof of Insertion` levels
             - **light proof**: Navigator points to the selected message
