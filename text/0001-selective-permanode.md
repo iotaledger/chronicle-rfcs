@@ -37,7 +37,14 @@ Use cases:
         - **milestone filter**
         - **message_id filter**
         - **indexation_key filter**
-    - The filtering can be applied by API calls to prune the database.
+  
+- API calls to prune the chronicle database
+    - Each API call can be triggered manually by user when the permanode is running
+    - API list (each can be used with a pre-defined set of data or function to remove messages)
+        - **prune_address**
+        - **prune_milestone**
+        - **prune_message_id**
+        - **prune_indexation_key**
 
 - Selective tables to create
     - Note that the user cannot select which column (field) in the table to be stored
