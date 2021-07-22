@@ -13,7 +13,9 @@ An abstraction for the scalable selective permanode feature for Chrysalis PH2, w
 
 # Pre-limitation
 
-In a tangle, the solidification mechanism is needed to make sure all the messages in a sub tangle is collected or not. In Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as a global-trusted message to solidify a sub tangle. In a coordicide tangle, it is still needed to have a mechanism to solidify a sub tangle, or we cannot guarantee all of the messages are collected. This solidification mechanism will impact the design of the selective permanode, because in the permanode we need to use this mechanism to make sure all of the selected messages in a given period of time are all collected. In the future coordicide tangle, if we can define another kind of global trusted messages (which should exist for solidification), then the proposed design still holds.
+In a tangle, the solidification mechanism is essential to make sure all the messages in a sub tangle being collected. To solidify a sub tangle, the queried IOTA nodes or permanodes need to contain the smallest full set of messages which are attached directly or indirectly by the global-trusted message.
+
+In Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as a global-trusted message to solidify a sub tangle. In a coordicide tangle, it is still necessary to have a mechanism to solidify a sub tangle, or we cannot guarantee all of the messages are collected. This solidification mechanism will impact the design of the selective permanode, because in the permanode we need to use the mechanism to make sure all of the selected messages in a given period of time are all collected. In the coordicide tangle, if we can define another kind of global-trusted messages (which should exist for solidification) between a given period of time, then the proposed design still holds.
 
 # Motivation
 
@@ -181,11 +183,7 @@ In selective permanode, we will select the interested messages and then store th
 
 # Drawbacks
 
-- If the there is no milestone or similar concepts in future IOTA protocol, then this selective permanode design needs to be changed.
-
-# Limitations
-
-- To solidify messages of a milestone, the queried IOTA nodes or permanodes need to contain the smallest full set of messages which are attached directly or indirectly by the milestone.
+- If the there is no solidification process where we can define a kind of global-trusted messages periodically in future IOTA protocol, then this selective permanode design needs to be changed according to the future protocol.
 
 # Unsolved questions
 - For **full proof** level, which option do we need to implement?
