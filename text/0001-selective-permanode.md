@@ -189,17 +189,17 @@ In selective permanode, we will select the interested messages and then store th
 
 # Alternative design
 
-In the following we introduce two kinds of selective permanode designs.
+In the following we introduce two kinds of alternative selective permanode designs.
 
 ## Pre-limitations
 
-In these two alternative designs, the solidification process is still essential to make the selective permanode ensure all the selective messages are collected in a sub tangle. Also IOTA tokens are needed to execute the selective permanode.
+In these two alternative designs, the solidification process is still essential to ensure all the selective messages are collected in a sub tangle. Also IOTA tokens are needed to execute the selective permanode.
 
 ## Value-transaction-based design
 
 ### Description
 
-The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf Müller uses the UTXOs to prove the existence of a message. For this selective permanode design, each selected message, or a batch of selected messages (with predefined or adaptive number of messages), are necessary to be put in the payload of a value transaction. Then, the value transaction should be issued to a trusted IOTA node, and the selective permanode needs to check whether the value transaction is already contained in the tangle.
+The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf Müller uses the UTXOs to prove the existence of a message. For this selective permanode design, each selected message, or a batch of selected messages (with predefined or adaptive number of messages), are necessary to be put in the payload of a value transaction. Then, the value transaction should be issued to a trusted IOTA node, and the selective permanode needs to check whether the value transaction is already confirmed in the tangle.
 
 #### Pros
 
@@ -209,7 +209,7 @@ The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf 
 
 - The user will need IOTA tokens to run a selective permanode
 - The selective permanode needs to issue massive redundancy value transactions for the selective messages if there are many
-- The selective permanode needs to monitor whether the value transactions are already contained in the tangle, which means reattachment or retry are necessary if they are orphaned.
+- The selective permanode needs to monitor whether the value transactions are already confirmed in the tangle, which means reattach/retry/promote are necessary if they are orphaned.
     - Will be more suitable to design it as a plugin in the IOTA node, so the incoming selected messages can be packed right away and be issued as a payload in a value transaction to itself (the IOTA node) with higher priority
 - The value transactions (with selective message as payload) between the selective permanodes with the same filtering settings cannot be shared, because each selective permanode will issue their own value transaction (which is unique) for a same selective message. Thus, this selective permanode design is not scalable.
 - The issued value transactions (those with the selective messages as a payload) are necessary to be stored in the selective permanode too, which introduces the following problem: Another mechanism is needed to solidify those value transactions, or we cannot know if any of them is missing. We cannot include them in a payload of another transaction and issue it again, because this will introduce an infinite loop
