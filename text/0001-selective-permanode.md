@@ -248,7 +248,7 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
 - An additional ISCP chain is essential to running associated with the selective-permanode.
 - The ISCP design is not completed yet.
 
-# Unsolved questions
+# Questions
 1. The naming of **light/hash/full proof** is proper and easy to understand? (solved)
   - We provide more description and explanation associated with their namings.
 2. For **full proof** level, which option do we need to implement?
