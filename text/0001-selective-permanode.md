@@ -81,6 +81,17 @@ Use cases:
         - Milestone: the milestone message
     - The solidification process is depth first, the middle messages which exist in the path between the milestone message and the selected messages will be stored in selective-permanode
 
+# Pons and cons of the proposed design
+
+## Pons
+
+- The selective-permanodes which have the same selected messages will record the exactly the same **proof** column, without extra data needed to be recorded (see the alternative design section for the comparison), and the stored **proof** between them can be shared.
+- This design can be integrated after the solidification process seamlessly.
+
+## Cons
+
+- The **proof** design should be associated with the solidification design, where we needs to define the global-trusted messages between a period of time.
+
 # Example
 In the following example, messages A, C, G will be stored with full information
 
@@ -123,35 +134,37 @@ Milestone M1 will be stored with full information
 Full messages D, E, K, J will be persisted
 
 #### Option 1
+- Suitable for the selected messages densely distributed in the tangle
 - Store the parent information for them in the [parents table](#parents)
 - Store the message information for them in the [messages table](#messages)
 
 `proof` column in the [message table](#messages) contains:
 - Message A
-    - hash(M1)
+    - M1 index
     - hash(G)
     - hash(D)
 - For message C
-    - hash(M1)
+    - M1 index
     - hash(J)
     - hash(K)
     - hash(E)
 - For message G
-    - hash(M1)
+    - M1 index
 
 #### Option 2
+- Suitable for the selected messages sparsely distributed in the tangle
 `proof` column in the [message table](#messages) contains:
 - Message A
-    - Full message of M1
+    - M1 index
     - Full message of G
     - Full message of D
 - Message C
-    - Full message of M1 
+    - M1 index
     - Full message of J
     - Full message of K
     - Full message of E
 - Message G
-    - Full message of M1
+    - M1 index
 
 
 ## Solidifiable/Verifiable selective messages
@@ -240,19 +253,20 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
 2. For **full proof** level, which option do we need to implement?
     - Option 1
         - Pros
-            - Save the storage cost.
+            - Save the storage cost if the selected messages are distributed densely in the tangle.
         - Cons
-            - Need to traverse the selective-permanode to proof the selected messages.
+            - Need to traverse the selective-permanode to verify the selected messages.
     - Option 2
         - Pros
-            - Ease of tracing and verifying the selected messages.
+            - Ease of verifying the selected messages.
         - Cons
-            - May consume lots of storage space if the number of middle messages (which might be repetitive) are many
+            - May consume lots of storage space if the number of shared middle messages of the selected messages are many.
 3. Do we force the user store the full path in the proof column, or we just store the full information of selected messages and the middle message in the [messages table](#messages) and [parents table](#parents)?
-    - Pros
-        - Save the storage cost.
-    - Cons
-        - To trace a selected message will be time consuming.
+    - Store the full path in the proof column as the proposed design
+        - Pros
+            - Save the storage cost.
+        - Cons
+            - To trace a selected message will be time consuming.
 4. Do we choose the alternative design to implement the selective-permanode?
 
 # TODO
