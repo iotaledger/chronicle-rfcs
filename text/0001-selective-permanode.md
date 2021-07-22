@@ -211,6 +211,8 @@ The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf 
 - The selective permanode needs to issue massive redundancy value transactions for the selective messages if there are many
 - The selective permanode needs to monitor whether the value transactions are already contained in the tangle, which means reattachment or retry are necessary if they are orphaned.
     - Will be more suitable to design it as a plugin in the IOTA node, so the incoming selected messages can be packed right away and be issued as a payload in a value transaction to itself (the IOTA node) with higher priority
+- The value transactions (with selective message as payload) between the selective permanodes with the same filtering settings cannot be shared, because each selective permanode will issue their own value transaction (which is unique) for a same selective message. Thus, this selective permanode design is not scalable.
+- The issued value transactions (those with the selective messages as a payload) are necessary to be stored in the selective permanode too, which introduces the following problem: Another mechanism is needed to solidify those value transactions, or we cannot know if any of them is missing. We cannot include them in a payload of another transaction and issue it again, because this will introduce an infinite loop
 
 ## ISCP-based design
 
