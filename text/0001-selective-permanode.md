@@ -13,7 +13,7 @@ An abstraction for the scalable selective-permanode feature for Chrysalis PH2, w
 
 # Pre-limitation
 
-In a tangle, the solidification mechanism is essential to make sure all the messages in a sub tangle being collected. To solidify a sub tangle, the queried IOTA nodes or permanodes need to contain the smallest full set of messages which are attached directly or indirectly by the global-trusted message.
+In a tangle, the solidification mechanism is essential to make sure all the messages in a sub tangle being collected. To solidify a sub tangle, the queried IOTA nodes or permanodes or the imported archive files need to contain the smallest full set of messages which are attached directly or indirectly by the global-trusted message.
 
 Note that in a tangle with or without coordicide, the selective-permanode always needs to query other IOTA nodes or permanodes or import the historical archive files to get the missing data.
 
