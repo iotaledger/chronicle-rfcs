@@ -139,7 +139,7 @@ Full messages D, E, K, J will be persisted
 - For message G
     - hash(M1)
 
-### Option 2
+#### Option 2
 `proof` column in the [message table](#messages) contains:
 - Message A
     - Full message of M1
