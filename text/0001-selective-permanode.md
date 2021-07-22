@@ -263,7 +263,7 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
         - Cons
             - May consume lots of storage space if the number of shared middle messages of the selected messages are many.
 3. Do we force the user store the full path in the proof column, or we just store the full information of selected messages and the middle message in the [messages table](#messages) and [parents table](#parents)?
-    - Store the full path in the proof column as the proposed design
+    - Do not store the full path in in the proof column
         - Pros
             - Save the storage cost.
         - Cons
