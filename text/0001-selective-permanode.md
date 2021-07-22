@@ -11,6 +11,10 @@
 
 An abstraction for the scalable selective permanode feature for Chrysalis PH2, which enables users to select which messages should be stored in the permanode.
 
+# Pre-limitation
+
+In a tangle, the solidification mechanism is needed to make sure all the messages in a sub tangle is collected or not. In Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as a global-trusted message to solidify a sub tangle. In a coordicide tangle, it is still needed to have a mechanism to solidify a sub tangle, or we cannot guarantee all of the messages are collected. This solidification mechanism will impact the design of the selective permanode, because in the permanode we need to use this mechanism to make sure all of the selected messages in a given period of time are all collected. In the future coordicide tangle, if we can define another kind of global trusted messages (which should exist for solidification), then the proposed design still holds.
+
 # Motivation
 
 The number of messages in tangle is huge and keeps increasing. For different user applications, not all data in tangle is necessary to keep. To reduce the maintenance cost, power consumption, as well as storage capacity, it is essential to enable users to **select** which messages should be persisted in Chronicle and which should not. This is called **selective-permanode**.
@@ -52,6 +56,8 @@ Use cases:
     - Some API calls will return `None` if the corresponding table is not created
 
 - Traceable selective message paths
+    - This feature is ease of tracing the selected message from a globally trusted message which is used to solidify the tangle
+      - 
     - The messages which are in the linked solidification paths between selected messages should be kept
         - Those messages should be stored in the selective permanode in three different `Proof of Insertion` levels
             - **light proof**: Navigator points to the selected message
