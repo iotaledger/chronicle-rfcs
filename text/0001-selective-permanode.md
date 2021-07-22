@@ -229,3 +229,18 @@ The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf 
 - The selective permanode needs to issue massive redundancy value transactions for the selective messages if there are many
 - The selective permanode needs to monitor whether the value transactions are already contained in the tangle, which means reattachment or retry are necessary if they are orphaned.
     - Will be more suitable to design it as a plugin in the IOTA node, so the incoming selected messages can be packed right away and be issued as a payload in a value transaction to itself (the IOTA node) with higher priority
+
+## ISCP-based design
+
+### Description
+
+An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) chain is adopted to record the selective messages. A selective permanode will sends the data (contains the selected messages with the associated paths) to the ISCP chain directly. In this design, we leverage the self-verifiable characteristic of the smart contract. Also the APIs provided in the ISCP chain can be leveraged to access the data.
+
+### Pros
+
+- Suitable for both tangles with and without a coordinator
+
+### Cons
+
+- An additional ISCP chain is essential to running associated with the selective permanode
+- The ISCP design is not complete yet
