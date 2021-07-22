@@ -65,12 +65,15 @@ Use cases:
         - Those messages should be stored in the selective-permanode in three different `Proof of Insertion` levels
             - **light proof**: Navigator points to the selected message
                 - We only store the path from the milestone index and the linked parent position of the middle messages in the path
-                - Need full-permanode to verify the path
+                - We can trace the selected message from its closest referencing milestone by the navigators to prove the existence of the selected message
+                - Need full-permanode or IOTA nodes which have the messages or historical archive files to verify the path
             - **hash proof**: Hashes which point to the selected message
                 - We store the message ids in the path from the milestone to the selected message
-                - Need full-permanode to verify the path
+                - We can trace the selected message from its closest referencing milestone by the linked hashes to prove the existence of the selected message
+                - Need full-permanode or IOTA nodes which have the messages or historical archive files to verify the path
             - **full proof**: Full messages which point to the selected message
                 - We store the full message in the path from the milestone to the selected message
+                - We can trace the the selected message from its closest referencing milestone by the linked messages to prove the existence of the selected message
                 - The selective-permanode is self-verifiable
     - Block definition
         - Selected message: the message to be selected to persist
@@ -233,6 +236,7 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
 
 # Unsolved questions
 - The naming of **light/hash/full proof** is proper and easy to understand?
+  - We provide more description and explanation associated with their namings.
 - For **full proof** level, which option do we need to implement?
     - Option 1
         - Pros
