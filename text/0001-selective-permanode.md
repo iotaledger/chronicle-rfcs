@@ -228,6 +228,7 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
 - The ISCP design is not completed yet
 
 # Unsolved questions
+- The naming of **light/hash/full proof** is proper and easy to understand?
 - For **full proof** level, which option do we need to implement?
     - Option 1
         - Pros
