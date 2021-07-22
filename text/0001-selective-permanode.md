@@ -187,24 +187,6 @@ In selective permanode, we will select the interested messages and then store th
 
 - If the there is no solidification process where we can define a kind of global-trusted messages periodically in future IOTA protocol, then this selective permanode design needs to be changed according to the future protocol.
 
-# Unsolved questions
-- For **full proof** level, which option do we need to implement?
-    - Option 1
-        - Pros
-            - Save the storage cost
-        - Cons
-            - Need to traverse the selective permanode to proof the selected messages
-    - Option 2
-        - Pros
-            - Ease of tracing and verifying the selected messages
-        - Cons
-            - May consume lots of storage space if the number of middle messages (which might be repetitive) are many
-- Do we force the user store the full path in the proof column, or we just store the full information of selected messages and the middle message in the [messages table](#messages) and [parents table](#parents)?
-    - Pros
-        - Save the storage cost
-    - Cons
-        - To trace a selected message will be time consuming
-
 # Alternative design
 
 In the following we introduce two kinds of selective permanode designs.
@@ -243,4 +225,23 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
 ### Cons
 
 - An additional ISCP chain is essential to running associated with the selective permanode
-- The ISCP design is not complete yet
+- The ISCP design is not completed yet
+
+# Unsolved questions
+- For **full proof** level, which option do we need to implement?
+    - Option 1
+        - Pros
+            - Save the storage cost
+        - Cons
+            - Need to traverse the selective permanode to proof the selected messages
+    - Option 2
+        - Pros
+            - Ease of tracing and verifying the selected messages
+        - Cons
+            - May consume lots of storage space if the number of middle messages (which might be repetitive) are many
+- Do we force the user store the full path in the proof column, or we just store the full information of selected messages and the middle message in the [messages table](#messages) and [parents table](#parents)?
+    - Pros
+        - Save the storage cost
+    - Cons
+        - To trace a selected message will be time consuming
+- Do we choose the alternative design to implement the selective permanode?
