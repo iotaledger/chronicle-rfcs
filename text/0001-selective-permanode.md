@@ -13,11 +13,11 @@ An abstraction for the scalable selective-permanode feature for Chrysalis PH2, w
 
 # Pre-limitation
 
-In a tangle, the solidification mechanism (even without the coordinator, see the [GoShimmer solidification spec](https://goshimmer.docs.iota.org/docs/protocol_specification/tangle/#Solidification)) is essential to make sure all the past cones of the message is known. To solidify a sub tangle, the queried IOTA nodes or permanodes or the imported archive files need to contain the smallest full set of messages which are attached directly or indirectly by the global-trusted message.
+In a tangle, the solidification mechanism (even without the coordinator, see the [GoShimmer solidification spec](https://goshimmer.docs.iota.org/docs/protocol_specification/tangle/#Solidification)) is essential. To solidify a sub tangle, the queried IOTA nodes or permanodes or the imported archive files need to contain the smallest full set of messages which are attached directly or indirectly by the global-trusted message.
 
 Note that in a tangle with or without coordicide, the selective-permanode always needs to query other IOTA nodes or permanodes or import the historical archive files to get the missing data.
 
-In Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as the global-trusted message to solidify a sub tangle. In coordicide tangle, the selective-permanode can issue global-trusted messages (signed by multisignature) periodically, which can be regarded as milestones in Chrysalis PH2, to attach the up-to-date tips, then this proposed design can be reused.
+In Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as the global-trusted message to solidify a sub tangle. In coordicide tangle, the selective-permanode can issue global-trusted messages (signed by multisignature) periodically, which can be regarded as milestones in Chrysalis PH2, to attach the up-to-date tips, then this proposed design can remain the same.
 
 # Motivation
 
