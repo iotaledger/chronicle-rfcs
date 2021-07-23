@@ -99,8 +99,10 @@ Use cases:
 # Example
 In the following example, messages A, C, G will be stored with full information
 
-<div style="text-align:center"><img src="../figure/0001/blocks.svg" /></div>
-<div style="text-align:center"><img src="../figure/0001/example.svg" /></div>
+<p align="center">
+<img src="../figure/0001/blocks.svg">
+<img src="../figure/0001/example.svg">
+</p>
 
 Messages D, E, K and J will be persisted in the [messages table](#messages)
 
