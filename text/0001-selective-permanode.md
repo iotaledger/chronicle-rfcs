@@ -34,7 +34,7 @@ Use cases:
 
 # Current storage overhead of full-permanode
 - Around 2.6TB/year
-    - Based on the information from https://chrysalis-dbfiles.iota.org/?prefix=chronicle/
+    - Based on the information from the [historical data](https://chrysalis-dbfiles.iota.org/?prefix=chronicle/)
     - Note the milestone period is 10 seconds.
 
 # Selective Permanode Features
