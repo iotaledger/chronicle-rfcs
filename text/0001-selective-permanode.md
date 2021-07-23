@@ -13,7 +13,7 @@ An abstraction for the scalable selective-permanode feature for Chrysalis PH2, w
 
 # Pre-limitation
 
-In a tangle, the solidification mechanism (even without the coordinator, see the [GoShimmer solidification spec](https://goshimmer.docs.iota.org/docs/protocol_specification/tangle/#Solidification)) is essential. To solidify a sub tangle, the queried IOTA nodes or permanodes or the imported archive files need to contain the smallest full set of messages which are attached directly or indirectly by the global-trusted message.
+In a tangle, the solidification mechanism (even without the coordinator, see the [GoShimmer solidification spec](https://goshimmer.docs.iota.org/docs/protocol_specification/tangle/#Solidification)) is essential. To solidify a past cone of a message (i.e., the messages which are attached directly or indirectly to the message), the queried IOTA nodes or permanodes or the imported archive files need to contain the past cone.
 
 Note that in a tangle with or without coordicide, the selective-permanode always needs to query other IOTA nodes or permanodes or import the historical archive files to get the missing data.
 
@@ -63,7 +63,8 @@ Use cases:
     - Some API calls will return `None` if the corresponding table is not created
 
 - Traceable selective message paths
-    - This feature is to ease of tracing the selected message (past cone) from a milestone
+    - This feature is to ease of tracing the selected messages from the closest referring milestone
+    - Note that by default all of the milestone messages are persisted in selective-permanode
     - The messages which are in the linked solidification paths between selected messages should be kept
         - Those messages should be stored in the selective-permanode in three different **proof** levels
             - **light proof**: Navigator points to the selected message
@@ -90,7 +91,6 @@ Use cases:
 
 - The selective-permanodes which have the same selected messages will record the exactly the same **proof** column, without extra data needed to be recorded (see the [alternative design section](#alternative-design) for comparison), and the stored **proof** between them can be shared.
 - The future pruning of the selected messages can be done easily by database operations (see the [alternative design section](#alternative-design) for comparison).
-- The pruning of the selective-permanode can be easily done by just pruning the database.
 
 ## Cons
 
@@ -265,7 +265,7 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
         - Pros
             - Ease of verifying the selected messages.
         - Cons
-            - May consume lots of storage space if the number of shared middle messages of the selected messages are many.
+            - May consume lots of storage space if the number of shared middle messages are many.
 3. Do we force the user store the full path in the proof column, or we just store the full information of selected messages and the middle message in the [messages table](#messages) and [parents table](#parents)?
     - Do not store the full path in in the proof column
         - Pros
