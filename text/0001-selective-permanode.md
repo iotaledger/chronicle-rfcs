@@ -13,11 +13,11 @@ An abstraction for the scalable selective-permanode feature for Chrysalis PH2, w
 
 # Pre-limitation
 
-In a tangle, the solidification mechanism is essential to make sure all the messages in a sub tangle being collected. To solidify a sub tangle, the queried IOTA nodes or permanodes or the imported archive files need to contain the smallest full set of messages which are attached directly or indirectly by the global-trusted message.
+In a tangle, the solidification mechanism (even without the coordinator, see the [GoShimmer solidification spec](https://goshimmer.docs.iota.org/docs/protocol_specification/tangle/#Solidification)) is essential to make sure all the past cones of the message is known. To solidify a sub tangle, the queried IOTA nodes or permanodes or the imported archive files need to contain the smallest full set of messages which are attached directly or indirectly by the global-trusted message.
 
 Note that in a tangle with or without coordicide, the selective-permanode always needs to query other IOTA nodes or permanodes or import the historical archive files to get the missing data.
 
-In Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as a global-trusted message to solidify a sub tangle. In a coordicide tangle, it is still necessary to have a mechanism to solidify a sub tangle, or we cannot guarantee all of the messages are collected. This solidification mechanism will impact the design of the selective-permanode, because in the permanode we need to use the mechanism to make sure all of the selected messages in a given period of time are all collected. In the coordicide tangle, if we can define another kind of global-trusted messages (which should exist for solidification) between a given period of time, then the proposed design still holds.
+In Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as the global-trusted message to solidify a sub tangle. In coordicide tangle, the selective-permanode can issue global-trusted messages (signed by multisignature) periodically, which can be regarded as milestones in Chrysalis PH2, to attach the up-to-date tips, then this proposed design can be reused.
 
 # Motivation
 
@@ -45,6 +45,8 @@ Use cases:
         - **milestone filter**
         - **message_id filter**
         - **indexation_key filter**
+    - Transaction-only
+      - The user can choose to only store transaction messages in the selective-permanode
   
 - API calls to prune the chronicle database
     - Each API call can be triggered manually by user when the permanode is running
@@ -53,6 +55,7 @@ Use cases:
         - **prune_milestone**
         - **prune_message_id**
         - **prune_indexation_key**
+        - **prune_none_transaction**
 
 - Selective tables to create
     - Note that the user cannot select which column (field) in the table to be stored
@@ -60,7 +63,7 @@ Use cases:
     - Some API calls will return `None` if the corresponding table is not created
 
 - Traceable selective message paths
-    - This feature is to ease of tracing the selected message from a globally trusted message which is used to solidify the tangle
+    - This feature is to ease of tracing the selected message (past cone) from a milestone
     - The messages which are in the linked solidification paths between selected messages should be kept
         - Those messages should be stored in the selective-permanode in three different **proof** levels
             - **light proof**: Navigator points to the selected message
@@ -86,12 +89,12 @@ Use cases:
 ## Pons
 
 - The selective-permanodes which have the same selected messages will record the exactly the same **proof** column, without extra data needed to be recorded (see the [alternative design section](#alternative-design) for comparison), and the stored **proof** between them can be shared.
-- This design can be integrated after the solidification process seamlessly.
 - The future pruning of the selected messages can be done easily by database operations (see the [alternative design section](#alternative-design) for comparison).
+- The pruning of the selective-permanode can be easily done by just pruning the database.
 
 ## Cons
 
-- The **proof** design should be associated with the solidification design, where we need to define the global-trusted messages between a period of time.
+- For a tangle without a coordinator, the selective-permanode is necessary to issue global-trusted messages with multisignature to reference to the tips.
 
 # Example
 In the following example, messages A, C, G will be stored with full information
@@ -202,7 +205,7 @@ In selective-permanode, we will select the interested messages and then store th
 
 # Drawbacks
 
-- If the there is no solidification process where we can define a kind of global-trusted messages periodically in future IOTA protocol, then this selective-permanode design needs to be changed according to the future protocol.
+- As described in the [Cons](#cons) section.
 
 # Alternative design
 
@@ -246,7 +249,8 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
 ### Cons
 
 - An additional ISCP chain is essential to running associated with the selective-permanode.
-- The ISCP design is not completed yet.
+- We need a well-defined smart contract to prune the ISCP chain.
+- The ISCP design is not completed yet and the selective-permanode needs to build upon it.
 
 # Questions
 1. The naming of **light/hash/full proof** is proper and easy to understand? (solved)
