@@ -64,7 +64,7 @@ Use cases:
 
 - Traceable selective message paths
     - This feature is to ease of tracing the selected messages from the closest referring milestone
-    - Note that by default all of the milestone messages are persisted in selective-permanode
+    - Note that by default all of the milestone referencing selected messages are persisted in selective-permanode
     - The messages which are in the linked solidification paths between selected messages should be kept
         - Those messages should be stored in the selective-permanode in three different **proof** levels
             - **light proof**: Navigator points to the selected message
