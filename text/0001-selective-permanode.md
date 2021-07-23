@@ -9,7 +9,7 @@
 
 # Summary
 
-An abstraction for the scalable selective-permanode feature for Chrysalis PH2, which enables users to select which messages should be stored in the permanode. The migration of this design to coo-less tangle is also described.
+An abstraction for the scalable selective-permanode feature and design for Chrysalis PH2, which enables users to select which messages should be stored in the permanode. The migration of this design to coo-less tangle is also described.
 
 # Pre-limitation
 
