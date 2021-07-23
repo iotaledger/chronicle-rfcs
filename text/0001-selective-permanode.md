@@ -79,6 +79,7 @@ Use cases:
                 - We store the full message in the path from the milestone to the selected message
                 - We can trace the the selected message from its closest referencing milestone by the linked messages to prove the existence of the selected message
                 - The selective-permanode is self-verifiable
+                    - Due to it is self-verifiable, additional verification layer (e.g., Merkle tree) is unnecessary to be added
     - Block definition
         - Selected message: the message to be selected to persist
         - Middle message: the message which is not selected but exists in the path between the milestone and the selected message, which should be also persisted to ease of message tracing
