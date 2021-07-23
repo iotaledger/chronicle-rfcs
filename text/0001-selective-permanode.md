@@ -17,7 +17,7 @@ In a tangle, the solidification mechanism (even without the coordinator, see the
 
 Note that in a tangle with or without coordicide, the selective-permanode always needs to query other IOTA nodes or permanodes or import the historical archive files to get the missing data.
 
-In Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as the global-trusted message to solidify a sub tangle. In coordicide tangle, the selective-permanode can issue global-trusted messages (signed by multisignature) periodically, which can be regarded as milestones in Chrysalis PH2, to attach the up-to-date tips, then this proposed design can remain the same.
+In Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as the global-trusted message to solidify a sub tangle. In coordicide tangle, the selective-permanode can issue global-trusted messages (signed by multisignature) periodically, which can be regarded as milestones in Chrysalis PH2, to attach the up-to-date tips. In this way, this proposed design can remain the same.
 
 # Motivation
 
