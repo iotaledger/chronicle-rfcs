@@ -121,16 +121,16 @@ Messages D, E, K and J will be persisted in the [messages table](#messages)
 ### **Hash proof**
 `proof` column in the [message table](#messages) contains:
 - Message A
-    - hash(M1)
+    - Milestone index of M1
     - hash(G)
     - hash(D)
 - Message C
-    - hash(M1)
+    - Milestone index of M1
     - hash(J)
     - hash(K)
     - hash(E)
 - Message G
-    - hash(M1)
+    - Milestone index of M1
 
 ### **Full proof**
 Milestone M1 will be stored with full information
@@ -144,32 +144,31 @@ Full messages D, E, K, J will be persisted
 
 `proof` column in the [message table](#messages) contains:
 - Message A
-    - M1 index
+    - Milestone index of M1
     - hash(G)
     - hash(D)
 - For message C
-    - M1 index
+    - Milestone index of M1
     - hash(J)
     - hash(K)
     - hash(E)
 - For message G
-    - M1 index
+    - Milestone index of M1
 
 #### Option 2
 - Suitable for the selected messages sparsely distributed in the tangle
 `proof` column in the [message table](#messages) contains:
 - Message A
-    - M1 index
+    - Milestone index of M1
     - Full message of G
     - Full message of D
 - Message C
-    - M1 index
+    - Milestone index of M1
     - Full message of J
     - Full message of K
     - Full message of E
 - Message G
-    - M1 index
-
+    - Milestone index of M1
 
 ## Solidifiable/Verifiable selective messages
 The solidification process in a selective-permanode is exactly the same as a full-permanode
