@@ -99,8 +99,8 @@ Use cases:
 # Example
 In the following example, messages A, C, G will be stored with full information
 
-![](../figure/0001/blocks.svg)
-![](../figure/0001/example.svg)
+<div style="text-align:center"><img src="../figure/0001/blocks.svg" /></div>
+<div style="text-align:center"><img src="../figure/0001/example.svg" /></div>
 
 Messages D, E, K and J will be persisted in the [messages table](#messages)
 
