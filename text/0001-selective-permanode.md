@@ -86,9 +86,9 @@ Use cases:
         - Milestone: the milestone message
     - The solidification process is depth first, the middle messages which exist in the path between the milestone message and the selected messages will be stored in selective-permanode
 
-# Pons and cons of the proposed design
+# Pros and cons of the proposed design
 
-## Pons
+## Pros
 
 - The selective-permanodes which have the same selected messages will record the exactly the same **proof** column, without extra data needed to be recorded (see the [alternative design section](#alternative-design) for comparison), and the stored **proof** between them can be shared.
 - The future pruning of the selected messages can be done easily by database operations (see the [alternative design section](#alternative-design) for comparison).
