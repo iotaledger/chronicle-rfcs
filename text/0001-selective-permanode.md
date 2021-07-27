@@ -66,16 +66,16 @@ Use cases:
     - This feature is to ease of tracing the selected messages from the closest referring milestone
     - Note that by default all of the milestone referencing selected messages are persisted in selective-permanode
     - The messages which are in the linked solidification paths between selected messages should be kept
-        - Those messages should be stored in the selective-permanode in three different **proof** levels
-            - **light proof**: Navigator points to the selected message
+        - Those messages should be stored in the selective-permanode in three different **inclusion-path** levels
+            - **inclusive-parent-location path**: Navigator points to the selected message
                 - We only store the path from the milestone index and the linked parent position of the middle messages in the path
                 - We can trace the selected message from its closest referencing milestone by the navigators to prove the existence of the selected message
                 - Need full-permanode or IOTA nodes which have the messages or historical archive files to verify the path
-            - **hash proof**: Hashes which point to the selected message
+            - **inclusive-hash path**: Hashes (message ids) which point to the selected message
                 - We store the message ids in the path from the milestone to the selected message
                 - We can trace the selected message from its closest referencing milestone by the linked hashes to prove the existence of the selected message
                 - Need full-permanode or IOTA nodes which have the messages or historical archive files to verify the path
-            - **full proof**: Full messages which point to the selected message
+            - **full-proof path**: Full messages which point to the selected message
                 - We store the full message in the path from the milestone to the selected message
                 - We can trace the the selected message from its closest referencing milestone by the linked messages to prove the existence of the selected message
                 - The selective-permanode is self-verifiable
@@ -90,7 +90,7 @@ Use cases:
 
 ## Pros
 
-- The selective-permanodes which have the same selected messages will record the exactly the same **proof** column, without extra data needed to be recorded (see the [alternative design section](#alternative-design) for comparison), and the stored **proof** between them can be shared.
+- The selective-permanodes which have the same selected messages will record the exactly the same **inclusion-path** column, without extra data needed to be recorded (see the [alternative design section](#alternative-design) for comparison), and the stored **inclusion-path** between them can be shared.
 - The future pruning of the selected messages can be done easily by database operations (see the [alternative design section](#alternative-design) for comparison).
 
 ## Cons
@@ -107,8 +107,8 @@ In the following example, messages A, C, G will be stored with full information
 
 Messages D, E, K and J will be persisted in the [messages table](#messages)
 
-### **Light proof**
-`proof` column in the [message table](#messages) contains:
+### **inclusive-parent-location path**
+`inclusion-path` column in the [message table](#messages) contains:
 - Message A
     - Milestone index of M1 (`u32`)
     - parent position of G (`u8`)
@@ -121,8 +121,8 @@ Messages D, E, K and J will be persisted in the [messages table](#messages)
 - Message G
     - Milestone index of M1
 
-### **Hash proof**
-`proof` column in the [message table](#messages) contains:
+### **inclusive-hash path**
+`inclusion-path` column in the [message table](#messages) contains:
 - Message A
     - Milestone index of M1
     - hash(G)
@@ -135,7 +135,7 @@ Messages D, E, K and J will be persisted in the [messages table](#messages)
 - Message G
     - Milestone index of M1
 
-### **Full proof**
+### **full-proof path**
 Milestone M1 will be stored with full information
 
 Full messages D, E, K, J will be persisted
@@ -145,7 +145,7 @@ Full messages D, E, K, J will be persisted
 - Store the parent information for them in the [parents table](#parents)
 - Store the message information for them in the [messages table](#messages)
 
-`proof` column in the [message table](#messages) contains:
+`inclusion-path` column in the [message table](#messages) contains:
 - Message A
     - Milestone index of M1
     - hash(G)
@@ -160,7 +160,7 @@ Full messages D, E, K, J will be persisted
 
 #### Option 2
 - Suitable for the selected messages sparsely distributed in the tangle
-`proof` column in the [message table](#messages) contains:
+`inclusion-path` column in the [message table](#messages) contains:
 - Message A
     - Milestone index of M1
     - Full message of G
@@ -181,17 +181,17 @@ Note that the solidification process is performed in caches
 In selective-permanode, we will select the interested messages and then store them to the database
 
 # Related table list
-- The following tables follow the same data model design of current [full-permanode](#https://github.com/iotaledger/chronicle.rs/blob/a5bbd5f04ef31b518b3567bc818fff9bc994ba73/chronicle/src/main.rs#L171-L253) with extra `proof` column in the [message table](#messages)
+- The following tables follow the same data model design of current [full-permanode](#https://github.com/iotaledger/chronicle.rs/blob/a5bbd5f04ef31b518b3567bc818fff9bc994ba73/chronicle/src/main.rs#L171-L253) with extra `inclusion-path` column in the [message table](#messages)
 
 ## messages
 - Primary key: message_id
 
-| Column     | Data type |
-| ---------- | --------- |
-| message_id | text      |
-| message    | blob      |
-| metadata   | blob      |
-| proof      | blob      |
+| Column         | Data type |
+| -------------- | --------- |
+| message_id     | text      |
+| message        | blob      |
+| metadata       | blob      |
+| inclusion_path | blob      |
 
 ## parents
 - Primary key: (parent_id, partition_id)
@@ -233,7 +233,7 @@ The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf 
 - The selective-permanode needs to issue massive redundancy value transactions for the selective messages if there are many.
 - The selective-permanode needs to monitor whether the value transactions are already included in the tangle, which means reattach/retry/promote are necessary if they are orphaned.
     - Will be more suitable to design it as a plugin in a IOTA node, so the incoming selected messages can be packed right away and be issued as a payload in a value transaction to itself (the IOTA node) with higher priority
-- The value transactions (with selective message(s) as a payload) between the selective-permanodes with the same filtering settings cannot be shared, because each selective-permanode will issue their own value transaction (which is unique) for the same selective message. Thus, this selective-permanode design is not scalable (each selective-permanode will remain different sets of transaction messages as the proof of selected messages even if they aim to select the same set of messages).
+- The value transactions (with selective message(s) as a payload) between the selective-permanodes with the same filtering settings cannot be shared, because each selective-permanode will issue their own value transaction (which is unique) for the same selective message. Thus, this selective-permanode design is not scalable (each selective-permanode will remain different sets of transaction messages as the inclusion paths of selected messages even if they aim to select the same set of messages).
 - The issued value transactions (those with the selective messages as a payload) are necessary to be stored in the selective-permanode, which introduces the following problem: Another mechanism is needed to solidify those value transactions, or we cannot know if any of them is missing. We cannot include them in a payload of another transaction and issue it again, because this will introduce an infinite loop.
 - If the selected messages are packed as a single payload, then the future pruning of these messages is impossible (because the messages were already packed and issued). The user will need to issue new packed selected messages again from the oldest date.
 - If the selected messages are not packed, and each selected message is sent as a payload in a transaction one by one, then the number of transaction (which is only used to prove the selected message) grows linearly with the number of selected messages.
@@ -257,7 +257,8 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
 # Questions
 1. The naming of **light/hash/full proof** is proper and easy to understand? (solved)
   - We provide more description and explanation associated with their namings.
-2. For **full proof** level, which option do we need to implement?
+  - We changed the naming to be `inclusive-parent-location path`, `inclusive-hash path`, and `full-proof path`.
+2. For **full-proof path** level, which option do we need to implement?
     - Option 1
         - Pros
             - Save the storage cost if the selected messages are distributed densely in the tangle.
@@ -268,8 +269,8 @@ An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) ch
             - Ease of verifying the selected messages.
         - Cons
             - May consume lots of storage space if the number of shared middle messages are many.
-3. Do we force the user store the full path in the proof column, or we just store the full information of selected messages and the middle message in the [messages table](#messages) and [parents table](#parents)?
-    - Do not store the full path in in the proof column
+3. Do we force the user store the full path in the inclusion-path column, or we just store the full information of selected messages and the middle message in the [messages table](#messages) and [parents table](#parents)?
+    - Do not store the full path in in the inclusion-path column
         - Pros
             - Save the storage cost.
         - Cons
