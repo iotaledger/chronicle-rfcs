@@ -236,7 +236,7 @@ The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf 
 - The value transactions (with selective message(s) as a payload) between the selective-permanodes with the same filtering settings cannot be shared, because each selective-permanode will issue their own value transaction (which is unique) for the same selective message. Thus, this selective-permanode design is not scalable (each selective-permanode will remain different sets of transaction messages as the proof of selected messages even if they aim to select the same set of messages).
 - The issued value transactions (those with the selective messages as a payload) are necessary to be stored in the selective-permanode, which introduces the following problem: Another mechanism is needed to solidify those value transactions, or we cannot know if any of them is missing. We cannot include them in a payload of another transaction and issue it again, because this will introduce an infinite loop.
 - If the selected messages are packed as a single payload, then the future pruning of these messages is impossible (because the messages were already packed and issued). The user will need to issue new packed selected messages again from the oldest date.
-- If the selected messages are not packed, and each selected message is sent as a payload in a transaction one by one, then the number of transaction (which is only used to prove the sleeted message) grows linearly with the number of selected messages.
+- If the selected messages are not packed, and each selected message is sent as a payload in a transaction one by one, then the number of transaction (which is only used to prove the selected message) grows linearly with the number of selected messages.
 
 ## ISCP-based design
 
