@@ -97,7 +97,7 @@ Use cases:
 ## Cons
 
 - For a tangle without a coordinator, the selective-permanode is necessary to issue global-trusted messages with signature/multisignature to reference to the tips.
-- If the global-trusted messages cannot be created easily, then the users who use the selective-permanode with the same settings need to form a group to issue their trusted messages, which might not be trustless globally.
+- If the global-trusted messages cannot be created easily, then the users who use the selective-permanode with the same settings need to form a group to issue their trusted messages, which might be trustless globally.
 
 # Example
 In the following example, messages A, C, G will be stored with full information
