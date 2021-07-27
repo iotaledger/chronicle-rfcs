@@ -23,9 +23,9 @@ In Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as
 
 The number of messages in tangle is huge and keeps increasing. For different user applications, not all data in tangle is necessary to keep. To reduce the maintenance cost, power consumption, as well as storage capacity, it is essential to enable users to **select** which messages should be persisted in Chronicle and which should not. This is called **selective-permanode**.
 
-Note that the sub tangle constructed by selective-permanode does not have to preserve path(s) between user interested data for confirmation tracing purpose. To trace the confirmation flow, the only path(s) needed to be kept in the selective-permanode is from an interested message to its corresponding **closest referencing milestone message**, because the paths between milestones must exist in IOTA Chrysalis PH2 protocol. For confirmation path tracing, it is not necessary to consume extra computing power or waste storage capacity to store the paths between milestones if there are no interested message between them.
+Note that the sub tangle constructed by selective-permanode does not have to preserve path(s) between user interested data for inclusion path (the path with the included, i.e., confirmed and non-conflicting, messages) tracing purpose. To trace the inclusion flow, the only path(s) needed to be kept in the selective-permanode is from an interested message to its corresponding **closest referencing milestone message**, because the paths between milestones must exist in IOTA Chrysalis PH2 protocol. For inclusion path tracing, it is not necessary to consume extra computing power or waste storage capacity to store the paths between milestones if there are no interested message between them.
 
-In summary, a **selective-permanode** provides a more cost-effective way than a **full-permanode** (which preserves all the messages in the tangle). It enables users to store only desired messages but also confirmation path tracing without any additional effort.
+In summary, a **selective-permanode** provides a more cost-effective way than a **full-permanode** (which preserves all the messages in the tangle). It enables users to store only desired messages but also inclusion path tracing without any additional effort.
 
 Use cases:
 
@@ -221,7 +221,7 @@ In these two alternative designs, the solidification process is still essential 
 
 ### Description
 
-The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf Müller uses the UTXOs to prove the existence of a message. For this selective-permanode design, each selected message, or a batch of selected messages (with predefined or adaptive number of messages), are necessary to be put in the payload of a value transaction. Then, the value transaction should be issued to a trusted IOTA node, and the selective-permanode needs to check whether the value transaction is already confirmed in the tangle.
+The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf Müller uses the UTXOs to prove the existence of a message. For this selective-permanode design, each selected message, or a batch of selected messages (with predefined or adaptive number of messages), are necessary to be put in the payload of a value transaction. Then, the value transaction should be issued to a trusted IOTA node, and the selective-permanode needs to check whether the value transaction is already included (confirmed and not conflicting) in the tangle.
 
 #### Pros
 
@@ -231,7 +231,7 @@ The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf 
 
 - The user will need IOTA tokens to run a selective-permanode.
 - The selective-permanode needs to issue massive redundancy value transactions for the selective messages if there are many.
-- The selective-permanode needs to monitor whether the value transactions are already confirmed in the tangle, which means reattach/retry/promote are necessary if they are orphaned.
+- The selective-permanode needs to monitor whether the value transactions are already included in the tangle, which means reattach/retry/promote are necessary if they are orphaned.
     - Will be more suitable to design it as a plugin in a IOTA node, so the incoming selected messages can be packed right away and be issued as a payload in a value transaction to itself (the IOTA node) with higher priority
 - The value transactions (with selective message(s) as a payload) between the selective-permanodes with the same filtering settings cannot be shared, because each selective-permanode will issue their own value transaction (which is unique) for the same selective message. Thus, this selective-permanode design is not scalable (each selective-permanode will remain different sets of transaction messages as the proof of selected messages even if they aim to select the same set of messages).
 - The issued value transactions (those with the selective messages as a payload) are necessary to be stored in the selective-permanode, which introduces the following problem: Another mechanism is needed to solidify those value transactions, or we cannot know if any of them is missing. We cannot include them in a payload of another transaction and issue it again, because this will introduce an infinite loop.
