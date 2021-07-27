@@ -85,6 +85,7 @@ Use cases:
         - Middle message: the message which is not selected but exists in the path between the milestone and the selected message, which should be also persisted to ease of message tracing
         - Milestone: the milestone message
     - The solidification process is depth first, the middle messages which exist in the path between the milestone message and the selected messages will be stored in selective-permanode
+    - Note that because the solidification path is deterministic, where parent 1 will be traversed first, then parent 2, then parent 3, etc., and the traversing is depth first, the `inclusion-path` for the same message in different selective-permanode with the same configuration will be the same.
 
 # Pros and cons of the proposed design
 
