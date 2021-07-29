@@ -13,7 +13,7 @@ An abstraction for the scalable selective-permanode feature and design for the [
 
 # Pre-limitation
 
-In a tangle, the solidification mechanism (even without the coordinator, see the [GoShimmer solidification spec](https://goshimmer.docs.iota.org/docs/protocol_specification/tangle/#Solidification)) is essential. To solidify a past cone of a message (i.e., the messages which are attached directly or indirectly to the message), the queried IOTA nodes or permanodes or the imported archive files need to contain the past cone.
+In a tangle, the solidification mechanism (even without the coordinator, see the [GoShimmer solidification spec](https://goshimmer.docs.iota.org/docs/protocol_specification/tangle/#solidification)) is essential. To solidify a past cone of a message (i.e., the messages which are attached directly or indirectly to the message), the queried IOTA nodes or permanodes or the imported archive files need to contain the past cone.
 
 Note that in both tangles with and without the coordinator, a selective-permanode always needs to query other IOTA nodes or permanodes or import the historical archive files to get the missing data.
 
