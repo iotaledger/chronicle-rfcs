@@ -43,7 +43,6 @@ Use cases:
     - Types of filters (each can be used with a pre-defined set of data or function to include/exclude messages)
         - **address filter**
         - **milestone filter**
-        - **message_id filter**
         - **indexation_key filter**
     - Transaction-only
       - The user can choose to only store transaction messages in the selective-permanode
