@@ -21,11 +21,11 @@ In the Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is use
 
 # Motivation
 
-The number of messages in tangle is huge and keeps increasing. For different user applications, not all data in tangle is necessary to keep. To reduce the maintenance cost, power consumption, as well as storage capacity, it is essential to enable users to **select** which messages should be persisted in Chronicle and which should not. This is called **selective-permanode**.
+The number of messages in a tangle is huge and keeps increasing. For different user applications, not all data in the tangle is necessary to keep. To reduce the maintenance cost, power consumption, as well as storage capacity, it is essential to enable users to **select** which messages should be persisted in Chronicle and which should not. This is called the **selective-permanode**.
 
-Note that the sub tangle constructed by selective-permanode does not have to preserve path(s) between user interested data for inclusion path (the path with the included, i.e., confirmed and non-conflicting, messages) tracing purpose. To trace the inclusion flow, the only path(s) needed to be kept in the selective-permanode is from an interested message to its corresponding **closest referencing milestone message**, because the paths between milestones must exist in IOTA Chrysalis PH2 protocol. For inclusion path tracing, it is not necessary to consume extra computing power or waste storage capacity to store the paths between milestones if there are no interested message between them.
+Note that the sub tangle constructed by a selective-permanode does not have to preserve path(s) between user interested data for inclusion path (the path with the included, i.e., confirmed and non-conflicting, messages) tracing purpose. To trace the inclusion flow, the only path(s) needed to be kept in the selective-permanode is from an interested message to its corresponding **closest referencing milestone message**, because the paths between milestones must exist in the Chrysalis PH2 protocol. For inclusion path tracing, it is not necessary to consume extra computing power or waste storage capacity to store the paths between milestones if there are no interested message between them.
 
-In summary, a **selective-permanode** provides a more cost-effective way than a **full-permanode** (which preserves all the messages in the tangle). It enables users to store only desired messages but also inclusion path tracing without any additional effort.
+In summary, the **selective-permanode** provides a more cost-effective way than a **full-permanode** (which preserves all the messages in the tangle). It enables users to store only desired messages but also inclusion path tracing without any additional effort.
 
 Use cases:
 
