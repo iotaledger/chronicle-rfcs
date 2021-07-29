@@ -17,7 +17,7 @@ In a tangle, the solidification mechanism (even without the coordinator, see the
 
 Note that in a tangle with or without coordinator(s) (i.e., the coo-less tangle), the selective-permanode always needs to query other IOTA nodes or permanodes or import the historical archive files to get the missing data.
 
-In the Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as the global-trusted message to solidify a [sub tangle](https://goshimmer.docs.iota.org/docs/protocol_specification/glossary#subtangle). In a coo-less tangle, the selective-permanode can issue global-trusted messages (signed by signature/multisignature) periodically, which can be regarded as milestones in Chrysalis PH2, to attach the up-to-date tips. In this way, this proposed design can remain the same.
+In the Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as a global-trusted message to solidify a [sub tangle](https://goshimmer.docs.iota.org/docs/protocol_specification/glossary#subtangle). In a coo-less tangle, the selective-permanode can issue global-trusted messages (signed by signature/multisignature) periodically, which can be regarded as milestones in Chrysalis PH2, to attach the up-to-date tips. In this way, this proposed design can remain the same.
 
 # Motivation
 
