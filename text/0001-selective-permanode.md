@@ -9,15 +9,15 @@
 
 # Summary
 
-An abstraction for the scalable selective-permanode feature and design for Chrysalis PH2, which enables users to select which messages should be stored in the permanode. The migration of this design to a coo-less tangle is also described.
+An abstraction for the scalable selective-permanode feature and design for the [Chrysalis PH2](https://blog.iota.org/chrysalis-phase-2-testnet-out-now/), which enables users to select which messages should be stored in the [permanode](https://blog.iota.org/introducing-chronicle-a-permanode-solution-8e506a2e0813/). The migration of this design to a coo-less [tangle](https://goshimmer.docs.iota.org/docs/protocol_specification/glossary#tangle) (i.e., a tangle without the [coordinator](https://goshimmer.docs.iota.org/docs/protocol_specification/glossary#coordinator)), is also described.
 
 # Pre-limitation
 
 In a tangle, the solidification mechanism (even without the coordinator, see the [GoShimmer solidification spec](https://goshimmer.docs.iota.org/docs/protocol_specification/tangle/#Solidification)) is essential. To solidify a past cone of a message (i.e., the messages which are attached directly or indirectly to the message), the queried IOTA nodes or permanodes or the imported archive files need to contain the past cone.
 
-Note that in a tangle with or without coordinator(s) (i.e., the coo-less tangle), the selective-permanode always needs to query other IOTA nodes or permanodes or import the historical archive files to get the missing data.
+Note that in both tangles with and without the coordinator, a selective-permanode always needs to query other IOTA nodes or permanodes or import the historical archive files to get the missing data.
 
-In the Chrysalis PH2, the milestone, which is issued by IOTA coordinator, is used as a global-trusted message to solidify a [sub tangle](https://goshimmer.docs.iota.org/docs/protocol_specification/glossary#subtangle). In a coo-less tangle, the selective-permanode can issue global-trusted messages (signed by signature/multisignature) periodically, which can be regarded as milestones in Chrysalis PH2, to attach the up-to-date tips. In this way, this proposed design can remain the same.
+In the Chrysalis PH2, the [milestone](https://goshimmer.docs.iota.org/docs/protocol_specification/glossary#milestones), which is issued by the coordinator, is used as a global-trusted message to solidify a [sub tangle](https://goshimmer.docs.iota.org/docs/protocol_specification/glossary#subtangle). In a coo-less tangle, the selective-permanode can issue global-trusted messages (signed by signature/multisignature) periodically, which can be regarded as the milestones in the Chrysalis PH2, to attach the up-to-date tips. In this way, this proposed design can remain the same.
 
 # Motivation
 
