@@ -74,6 +74,7 @@ Use cases:
                 - We store the message ids in the path from the milestone to the selected message
                 - We can trace the selected message from its closest referencing milestone by the linked hashes to prove the existence of the selected message
                 - Need full-permanode or IOTA nodes which have the messages or historical archive files to verify the path
+                - Note that the difference between the **inclusive-parent-location path** and the **inclusive-hash path** is the efficiency of middle-message verification. For the prior one, to verify one of the middle messages of a selected message, one needs to trace the path, query each message, and get the message id one by one, till the middle message is reached. However, for the latter one, the user can use the message id recorded in the path directly to query the middle message and verify it.
             - **full-proof path**: Full messages which point to the selected message
                 - We store the full message in the path from the milestone to the selected message
                 - We can trace the the selected message from its closest referencing milestone by the linked messages to prove the existence of the selected message
