@@ -57,7 +57,7 @@ Use cases:
         - **prune_none_transaction**
 
 - Selective tables to create
-    - In current permanode node design, we have the following tables
+    - In current permanode design, we have the following tables
         - **messages table**: to query a message based on the given message id
         - **addresses table**: to query a transaction id based on the given address
             - Can be removed if the information of an address containing which transactions are not needed 
