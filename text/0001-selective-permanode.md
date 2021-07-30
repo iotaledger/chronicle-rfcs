@@ -66,7 +66,7 @@ Use cases:
     - Note that by default all of the milestone referencing selected messages are persisted in selective-permanode
     - The messages which are in the linked solidification paths between selected messages should be kept
         - Those messages should be stored in the selective-permanode in three different **inclusion-path** levels
-            - **inclusive-parent-location path**: Navigator points to the selected message
+            - **inclusive-parent-location path**: Navigator points to the selected message, i.e., the referencing parent locations from the closest referencing milestone to the selected message
                 - We only store the path from the milestone index and the linked parent position of the middle messages in the path
                 - We can trace the selected message from its closest referencing milestone by the navigators to prove the existence of the selected message
                 - Need full-permanode or IOTA nodes which have the messages or historical archive files to verify the path
