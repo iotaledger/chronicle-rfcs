@@ -57,6 +57,22 @@ Use cases:
         - **prune_none_transaction**
 
 - Selective tables to create
+    - In current permanode node design, we have the following tables
+        - **messages table**: to query a message based on the given message id
+        - **addresses table**: to query a transaction id based on the given address
+            - Can be removed if the information of an address containing which transactions are not needed 
+        - **indexes table**: to query a message id based on the given index
+            - Can be removed if the information of which messages have a specific indexation are not needed
+        - **parents table**: to query a message id based on the children message id and the parent location.
+        - **transactions table**: to query a transaction based on the given transaction id
+            - Can be removed if the mapping information from transaction id to transaction is not needed.
+        - **analytics table**: query the analytics results (number of messages, number of transferred tokens, number of transactions, etc.) based on a given milestone index range
+            - Can be removed if the analytics results are not needed
+        - **milestones table**: query a milestone based on the given milestone index
+        - **hints table**: query a milestone index and partition ids according to the provided `hint`. This table is a second partition layer to boost the query efficient when many data have the same key (e.g., when many transactions share the same address, or many messages share the same indexation)
+        - **sync table**: query the sync status (if all the messages are already persisted in a milestone) based on the given milestone index range
+    - To further reduce the storage usage, in a **selective-permanode**, the user can `select` which tables to be created. Note that not all the tables are selectable. Among these tables, only addresses/indexes/transactions/analytics are selectable
+        - The messages/parents/milestones table need to be created because they provide the message and path tracing information of the selected messages. The `hints` table, which is tightly coupled with the current API design to boost the query efficiency, is not selective. Also the sync table, which provides the record of whether the selected messages in a given milestone already logged and persisted, should be created
     - Note that the user cannot select which column (field) in the table to be stored
         - Otherwise the data model needs to be customized
     - Some API calls will return `None` if the corresponding table is not created
