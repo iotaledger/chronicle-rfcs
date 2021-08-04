@@ -260,7 +260,7 @@ The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf 
 
 ### Description
 
-An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) chain is adopted to record the selective messages. A selective-permanode will send the data (contain the selected messages with the associated paths) to the ISCP chain directly. In this design, we leverage the self-verifiable characteristic of the smart contract. Also, the APIs provided in the ISCP chain can be leveraged to access the data.
+An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) chain is adopted to record the selective messages. A selective-permanode will send the data (contain the selected messages with the associated paths) to the ISCP chain directly. In this design, we leverage the self-verifiable characteristic of the smart contract. Also, the APIs provided in the ISCP chain can be leveraged to access the data. Note that more details about the ISCP which is under development can be seen [here](https://docs.google.com/document/d/17FiSkCYMTwfhzbDBOdQgJ7oGF8xlB3j4LDTPLmoas6Q), including the ISCP architecture as well as the permanode smart contract.
 
 ### Pros
 
