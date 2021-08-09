@@ -49,12 +49,19 @@ Use cases:
   
 - API calls to prune the chronicle database
     - Each API call can be triggered manually by user when the permanode is running
-    - API list (each can be used with a pre-defined set of data or function to remove messages)
+    - Pruning API list (each can be used with a pre-defined set of data or function to remove messages)
         - **prune_address**
         - **prune_milestone**
         - **prune_message_id**
         - **prune_indexation_key**
         - **prune_none_transaction**
+
+    - **store_message(message_id)** API, which can be used to persist fresh messages (which are issued few seconds before)
+        - Useful in the following scenario
+            - A device creates a message, whose associated message_id cannot be known in advance
+            - Directly after the device or someone receiving the message, the user can use this API call to ask the selective-permanode to store it. At this point the message should only be a few seconds old and be available on every normal IOTA node
+
+- The selective-permanode will query other full-permanode/IOTA nodes for the messages which are not selected (stored) in the selective-permanode but queried by users
 
 - Selective tables to create
     - In current permanode design, we have the following tables
