@@ -1,0 +1,303 @@
++ Feature name: `selective-permanode`
++ Start date: 2021-07-19
++ RFC PR: [iotaledger/chronicle-rfcs#0001](https://github.com/iotaledger/chronicle-rfcs/pull/1)
++ Chronicle issue:  [iotaledger/chronicle.rs#102](https://github.com/iotaledger/chronicle.rs/issues/102)
++ Author list
+    + Louay Kamel (louay.kamel@iota.org)
+    + Alexander Coats (alexander.coats@iota.org)
+    + Bing-Yang Lin (bingyang.lin@iota.org)
+
+# Summary
+
+An abstraction for the scalable selective-permanode feature and design for the [Chrysalis PH2](https://blog.iota.org/chrysalis-phase-2-testnet-out-now/), which enables users to select which messages should be stored in the [permanode](https://blog.iota.org/introducing-chronicle-a-permanode-solution-8e506a2e0813/). The migration of this design to a coo-less [tangle](https://goshimmer.docs.iota.org/docs/protocol_specification/glossary#tangle) (i.e., a tangle without the [coordinator](https://goshimmer.docs.iota.org/docs/protocol_specification/glossary#coordinator)), is also described.
+
+# Pre-limitation
+
+In a tangle, the solidification mechanism (even without the coordinator, see the [GoShimmer solidification spec](https://goshimmer.docs.iota.org/docs/protocol_specification/tangle/#solidification)) is essential. To solidify a past cone of a message (i.e., the messages which are attached directly or indirectly to the message), the queried IOTA nodes or permanodes or the imported archive files need to contain the past cone.
+
+Note that in both tangles with and without the coordinator, a selective-permanode always needs to query other IOTA nodes or permanodes or import the historical archive files to get the missing data.
+
+In the Chrysalis PH2, the [milestone](https://goshimmer.docs.iota.org/docs/protocol_specification/glossary#milestones), which is issued by the coordinator, is used as a global-trusted message to solidify a [sub tangle](https://goshimmer.docs.iota.org/docs/protocol_specification/glossary#subtangle). In a coo-less tangle, the selective-permanode can issue global-trusted messages (signed by signature/multisignature) periodically, which can be regarded as the milestones in the Chrysalis PH2, to attach the up-to-date tips. In this way, this proposed design can remain the same.
+
+# Motivation
+
+The number of messages in a tangle is huge and keeps increasing. For different user applications, not all data in the tangle is necessary to keep. To reduce the maintenance cost, power consumption, as well as storage capacity, it is essential to enable users to **select** which messages should be persisted in Chronicle and which should not. This is called the **selective-permanode**.
+
+Note that the sub tangle constructed by a selective-permanode does not have to preserve path(s) between user interested data for inclusion path (the path with the included, i.e., confirmed and non-conflicting, messages) tracing purpose. To trace the inclusion flow, the only path(s) needed to be kept in the selective-permanode is from an interested message to its corresponding **closest referencing milestone message**, because the paths between milestones must exist in the Chrysalis PH2 protocol. For inclusion path tracing, it is not necessary to consume extra computing power or waste storage capacity to store the paths between milestones if there are no interested message between them.
+
+In summary, the **selective-permanode** provides a more cost-effective way than a **full-permanode** (which preserves all the messages in the tangle). It enables users to store only desired messages but also inclusion path tracing without any additional effort.
+
+Use cases:
+
+1. Only persist specific data of the tangle in Chronicle and truncate/remove the unwanted ones.
+2. Provide a more cost-effective storage solution than a **full-permanode**.
+
+# Current storage overhead of full-permanode
+- Around 2.6TB/year
+    - Based on the information from the [historical data](https://chrysalis-dbfiles.iota.org/?prefix=chronicle/)
+    - Note the milestone period is 10 seconds.
+
+# Selective Permanode Features
+- User-defined messages to persist based on filtering
+    - Each filter can be combined via AND/OR with another filter
+    - Types of filters (each can be used with a pre-defined set of data or function to include/exclude messages)
+        - **address filter**
+        - **milestone filter**
+        - **indexation_key filter**
+    - Transaction-only
+      - The user can choose to only store transaction messages in the selective-permanode
+  
+- API calls to prune the chronicle database
+    - Each API call can be triggered manually by user when the permanode is running
+    - Pruning API list (each can be used with a pre-defined set of data or function to remove messages)
+        - **prune_address**
+        - **prune_milestone**
+        - **prune_message_id**
+        - **prune_indexation_key**
+        - **prune_none_transaction**
+
+    - **store_message(message_id)** API, which can be used to persist fresh messages (which are issued few seconds before)
+        - Useful in the following scenario
+            - A device creates a message, whose associated message_id cannot be known in advance, or the message has no indexation, or the indexation key changes every time
+            - Directly after the device or someone receiving the message, the user can use this API call to ask the selective-permanode to store it. At this point the message should only be a few seconds old and be available on every normal IOTA node
+
+- The selective-permanode will query other full-permanode/IOTA nodes for the messages which are not selected (stored) in the selective-permanode but queried by users
+
+- Selective tables to create
+    - In current permanode design, we have the following tables
+        - **messages table**: to query a message based on the given message id
+        - **addresses table**: to query a transaction id based on the given address
+            - Can be removed if the information of an address containing which transactions are not needed 
+        - **indexes table**: to query a message id based on the given index
+            - Can be removed if the information of which messages have a specific indexation are not needed
+        - **parents table**: to query a message id based on the children message id and the parent location.
+        - **transactions table**: to query a transaction based on the given transaction id
+            - Can be removed if the mapping information from transaction id to transaction is not needed.
+        - **analytics table**: query the analytics results (number of messages, number of transferred tokens, number of transactions, etc.) based on a given milestone index range
+            - Can be removed if the analytics results are not needed
+        - **milestones table**: query a milestone based on the given milestone index
+        - **hints table**: query a milestone index and partition ids according to the provided `hint`. This table is a second partition layer to boost the query efficient when many data have the same key (e.g., when many transactions share the same address, or many messages share the same indexation)
+        - **sync table**: query the sync status (if all the messages are already persisted in a milestone) based on the given milestone index range
+    - To further reduce the storage usage, in a **selective-permanode**, the user can **select** which tables to be created. Note that not all the tables are selective. Among these tables, only addresses/indexes/transactions/analytics are selective
+        - The messages/parents/milestones table need to be created because they provide the message and path tracing information of the selected messages. The `hints` table, which is tightly coupled with the current API design to boost the query efficiency, is not selective. Also the sync table, which provides the record of whether the selected messages in a given milestone already logged and persisted, should be created
+    - Note that the user cannot select which column (field) in the table to be stored
+        - Otherwise the data model needs to be customized
+    - Some API calls will return `None` if the corresponding table is not created
+
+- Traceable selective message paths
+    - This feature is to ease of tracing the selected messages from the closest referring milestone
+    - Note that by default all of the milestone referencing selected messages are persisted in selective-permanode
+    - The messages which are in the linked solidification paths between selected messages should be kept
+        - Those messages should be stored in the selective-permanode in three different **inclusion-path** levels
+            - **inclusive-parent-location path**: Navigator points to the selected message, i.e., the referencing parent locations from the closest referencing milestone to the selected message
+                - We only store the path from the milestone index and the linked parent position of the middle messages in the path
+                - We can trace the selected message from its closest referencing milestone by the navigators to prove the existence of the selected message
+                - Need full-permanode or IOTA nodes which have the messages or historical archive files to verify the path
+            - **inclusive-hash path**: Hashes (message ids) which point to the selected message
+                - We store the message ids in the path from the milestone to the selected message
+                - We can trace the selected message from its closest referencing milestone by the linked hashes to prove the existence of the selected message
+                - Need full-permanode or IOTA nodes which have the messages or historical archive files to verify the path
+                - Note that the difference between the **inclusive-parent-location path** and the **inclusive-hash path** is the efficiency of middle-message verification. For the prior one, to verify one of the middle messages of a selected message, one needs to trace the path, query each message, and get the message id one by one, till the middle message is reached. However, for the latter one, the user can use the message id recorded in the path directly to query the middle message and verify it.
+            - **full-proof path**: Full messages which point to the selected message
+                - We store the full message in the path from the milestone to the selected message
+                - We can trace the the selected message from its closest referencing milestone by the linked messages to prove the existence of the selected message
+                - The selective-permanode is self-verifiable
+                    - Due to it is self-verifiable, additional verification layer (e.g., Merkle tree) is unnecessary to be added
+    - Block definition
+        - Selected message: the message to be selected to persist
+        - Middle message: the message which is not selected but exists in the path between the milestone and the selected message, which should be also persisted to ease of message tracing
+        - Milestone: the milestone message
+    - The solidification process is depth first, the middle messages which exist in the path between the milestone message and the selected messages will be stored in selective-permanode
+    - Note that because the solidification path is deterministic, where parent 1 will be traversed first, then parent 2, then parent 3, etc., and the traversing is depth first, the `inclusion-path` for the same message in different selective-permanode with the same configuration will be the same.
+
+# Pros and cons of the proposed design
+
+## Pros
+
+- The selective-permanodes which have the same selected messages will record the exactly the same **inclusion-path** column, without extra data needed to be recorded (see the [alternative design section](#alternative-design) for comparison), and the stored **inclusion-path** between them can be shared.
+- The future pruning of the selected messages can be done easily by database operations (see the [alternative design section](#alternative-design) for comparison).
+
+## Cons
+
+- For a tangle without a coordinator, the selective-permanode is necessary to issue global-trusted messages with signature/multisignature to reference to the tips.
+- If the global-trusted messages cannot be created easily, then the users who use the selective-permanode with the same settings need to form a group to issue their trusted messages, which might be trustless globally.
+
+# Example
+In the following example, messages A, C, G will be stored with full information
+
+<p align="center">
+<img src="../figure/0001/blocks.svg">
+<img src="../figure/0001/example.svg">
+</p>
+
+Messages D, E, K and J will be persisted in the [messages table](#messages)
+
+### **inclusive-parent-location path**
+`inclusion-path` column in the [message table](#messages) contains:
+- Message A
+    - Milestone index of M1 (`u32`)
+    - parent position of G (`u8`)
+    - parent position of D (`u8`)
+- Message C
+    - Milestone index of M1
+    - parent position of J
+    - parent position of K
+    - parent position of E
+- Message G
+    - Milestone index of M1
+
+### **inclusive-hash path**
+`inclusion-path` column in the [message table](#messages) contains:
+- Message A
+    - Milestone index of M1
+    - hash(G)
+    - hash(D)
+- Message C
+    - Milestone index of M1
+    - hash(J)
+    - hash(K)
+    - hash(E)
+- Message G
+    - Milestone index of M1
+
+### **full-proof path**
+Milestone M1 will be stored with full information
+
+Full messages D, E, K, J will be persisted
+
+#### Option 1
+- Suitable for the selected messages densely distributed in the tangle
+- Store the parent information for them in the [parents table](#parents)
+- Store the message information for them in the [messages table](#messages)
+
+`inclusion-path` column in the [message table](#messages) contains:
+- Message A
+    - Milestone index of M1
+    - hash(G)
+    - hash(D)
+- For message C
+    - Milestone index of M1
+    - hash(J)
+    - hash(K)
+    - hash(E)
+- For message G
+    - Milestone index of M1
+
+#### Option 2
+- Suitable for the selected messages sparsely distributed in the tangle
+`inclusion-path` column in the [message table](#messages) contains:
+- Message A
+    - Milestone index of M1
+    - Full message of G
+    - Full message of D
+- Message C
+    - Milestone index of M1
+    - Full message of J
+    - Full message of K
+    - Full message of E
+- Message G
+    - Milestone index of M1
+
+## Solidifiable/Verifiable selective messages
+The solidification process in a selective-permanode is exactly the same as a full-permanode
+
+Note that the solidification process is performed in caches
+
+In selective-permanode, we will select the interested messages and then store them to the database
+
+# Related table list
+- The following tables follow the same data model design of current [full-permanode](#https://github.com/iotaledger/chronicle.rs/blob/a5bbd5f04ef31b518b3567bc818fff9bc994ba73/chronicle/src/main.rs#L171-L253) with extra `inclusion-path` column in the [message table](#messages)
+
+## messages
+- Primary key: message_id
+
+| Column         | Data type |
+| -------------- | --------- |
+| message_id     | text      |
+| message        | blob      |
+| metadata       | blob      |
+| inclusion_path | blob      |
+
+## parents
+- Primary key: (parent_id, partition_id)
+
+| Column          | Data type |
+| --------------- | --------- |
+| parent_id       | text      |
+| partition_id    | smallint  |
+| milestone_index | int       |
+| message_id      | text      |
+| inclusion_state | blob      |
+
+
+# Drawbacks
+
+- As described in the [Cons](#cons) section.
+
+# Alternative design
+
+In the following we introduce two kinds of alternative selective-permanode designs.
+
+## Pre-limitations
+
+In these two alternative designs, the solidification process is still essential to ensure all the selective messages are collected in a sub tangle. Also IOTA tokens are needed to execute the selective-permanode.
+
+## Value-transaction-based design
+
+### Description
+
+The [tangleproof](https://github.com/Thoralf-M/tangleproof) proposed by Thoralf Müller uses the UTXOs to prove the existence of a message. For this selective-permanode design, each selected message, or a batch of selected messages (with predefined or adaptive number of messages), are necessary to be put in the payload of a value transaction. Then, the value transaction should be issued to a trusted IOTA node, and the selective-permanode needs to check whether the value transaction is already included (confirmed and not conflicting) in the tangle.
+
+#### Pros
+
+- Suitable for both tangles with and without a coordinator.
+
+#### Cons
+
+- The user will need IOTA tokens to run a selective-permanode.
+- The selective-permanode needs to issue massive redundancy value transactions for the selective messages if there are many.
+- The selective-permanode needs to monitor whether the value transactions are already included in the tangle, which means reattach/retry/promote are necessary if they are orphaned.
+    - Will be more suitable to design it as a plugin in a IOTA node, so the incoming selected messages can be packed right away and be issued as a payload in a value transaction to itself (the IOTA node) with higher priority
+- The value transactions (with selective message(s) as a payload) between the selective-permanodes with the same filtering settings cannot be shared, because each selective-permanode will issue their own value transaction (which is unique) for the same selective message. Thus, this selective-permanode design is not scalable (each selective-permanode will remain different sets of transaction messages as the inclusion paths of selected messages even if they aim to select the same set of messages).
+- The issued value transactions (those with the selective messages as a payload) are necessary to be stored in the selective-permanode, which introduces the following problem: Another mechanism is needed to solidify those value transactions, or we cannot know if any of them is missing. We cannot include them in a payload of another transaction and issue it again, because this will introduce an infinite loop. Otherwise, the selective-permanode needs to rely on other nodes or full-permanodes, which contain the issued transactions (those contain the selected messages as payload, or any clues in the UTXOs those can be used to verify the selected messages), to verify itself in the future.
+- If the selected messages are packed as a single payload (to reduce the number of needed transactions), then the future pruning of these messages is impossible (because the messages were already packed and issued). The user will need to issue new packed selected messages again from the oldest date. An example follows. If one transaction payload which contains several selected messages, e.g, A, C, G in the [example](#example), was already issued and included in the tangle, then in the future if one wants to only select G and prune A and C, then the user will need to issue another transaction which contains G only, where A and C and their paths are not necessary to be stored anymore, because the user doesn't need to trace A and C (which are not selected). Note that if only the message ids are stored in the transaction payload, and the full messages are stored separately in selective-permanode, then the message ids cannot be pruned.
+- If the selected messages are not packed, and each selected message is sent as a payload in a transaction one by one, then the number of transaction (which is only used to prove the selected message) grows linearly with the number of selected messages.
+
+## ISCP-based design
+
+### Description
+
+An [ISCP](https://blog.iota.org/iota-smart-contracts-protocol-alpha-release/) chain is adopted to record the selective messages. A selective-permanode will send the data (contain the selected messages with the associated paths) to the ISCP chain directly. In this design, we leverage the self-verifiable characteristic of the smart contract. Also, the APIs provided in the ISCP chain can be leveraged to access the data. Note that more details about the ISCP which is under development can be seen [here](https://docs.google.com/document/d/17FiSkCYMTwfhzbDBOdQgJ7oGF8xlB3j4LDTPLmoas6Q), including the ISCP architecture as well as the permanode smart contract.
+
+### Pros
+
+- Suitable for both tangles with and without a coordinator.
+
+### Cons
+
+- An additional ISCP chain is essential to running associated with the selective-permanode.
+- We need a well-defined smart contract to prune the ISCP chain.
+- The ISCP design is not completed yet and the selective-permanode needs to be built upon it.
+
+# Questions
+1. The naming of **light/hash/full proof** is proper and easy to understand? (solved)
+  - We provide more description and explanation associated with their namings.
+  - We changed the naming to be `inclusive-parent-location path`, `inclusive-hash path`, and `full-proof path`.
+2. For **full-proof path** level, which option do we need to implement?
+    - Option 1
+        - Pros
+            - Save the storage cost if the selected messages are distributed densely in the tangle.
+        - Cons
+            - Need to traverse the selective-permanode to verify the selected messages.
+    - Option 2
+        - Pros
+            - Ease of verifying the selected messages.
+        - Cons
+            - May consume lots of storage space if the number of shared middle messages are many.
+3. Do we force the user store the full path in the inclusion-path column, or we just store the full information of selected messages and the middle message in the [messages table](#messages) and [parents table](#parents)?
+    - Do not store the full path in in the inclusion-path column
+        - Pros
+            - Save the storage cost.
+        - Cons
+            - To trace a selected message will be time consuming.
+4. Do we choose the alternative design to implement the selective-permanode?
