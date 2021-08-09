@@ -58,7 +58,7 @@ Use cases:
 
     - **store_message(message_id)** API, which can be used to persist fresh messages (which are issued few seconds before)
         - Useful in the following scenario
-            - A device creates a message, whose associated message_id cannot be known in advance
+            - A device creates a message, whose associated message_id cannot be known in advance, or the message has no indexation, or the indexation key changes every time
             - Directly after the device or someone receiving the message, the user can use this API call to ask the selective-permanode to store it. At this point the message should only be a few seconds old and be available on every normal IOTA node
 
 - The selective-permanode will query other full-permanode/IOTA nodes for the messages which are not selected (stored) in the selective-permanode but queried by users
